@@ -21,7 +21,7 @@ router.post('/signUp', async (req, res) => {
     console.log(err)
     res.status(422).json(err)
   }
-}
+})
 
 // @routes POST api/signIn
 // @desc SIGN IN
@@ -46,7 +46,7 @@ router.post('/signIn', async (req, res) => {
   } catch (err) {
     res.status(401).json({ message: 'Unauthorized' })
   }
-}
+})
 
 module.exports = {
   signUp, signIn
