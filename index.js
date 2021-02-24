@@ -1,17 +1,12 @@
 const express = require('express')
 const mongoose = require('mongoose')
-const { MONGO_URI } = require('./config')
+const dotenv = require('dotenv')
 
-// ROUTES
-const usersRoutes = require('./routes/api/users')
-
-const app = express()
-
-// BodyParser Middleware
-app.use(express.json())
+//PATH TO ENV
+dotenv.config({ path: './config/config.env' })
 
 // Connect to MongoDB
-mongoose.connect(MONGO_URI, {
+mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: true
@@ -19,9 +14,16 @@ mongoose.connect(MONGO_URI, {
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(error))
 
+//ROUTES
+const router = require('./config/routes')
+
+const app = express()
+
+// BodyParser Middleware
+app.use(express.json())
 
 // USER ROUTES
-app.use('/api/users', usersRoutes)
+app.use('/api', router)
 
 const PORT = process.env.PORT || 5000
 

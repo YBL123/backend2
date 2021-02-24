@@ -1,17 +1,12 @@
-const express = require('express');
-const router = express.Router();
+const User = require('../models/user')
 const jwt = require('jsonwebtoken')
-// users Model
-const Users = require('../../models/Users');
 
-// @routes POST api/signUp
-// @desc SIGN UP
-router.post('/signUp', async (req, res) => {
+const signUp = async (req, res, next) => {
   try {
-    let query = Users.create(req.body)
+    let query = User.create(req.body)
     let user = await query
     
-    query = Users.findOne({ _id: user._id })
+    query = User.findOne({ _id: user._id })
     query.select('-_id -__v -id +password')
 
     user = await query
@@ -21,15 +16,13 @@ router.post('/signUp', async (req, res) => {
     console.log(err)
     res.status(422).json(err)
   }
-})
+}
 
-// @routes POST api/signIn
-// @desc SIGN IN
-router.post('/signIn', async (req, res) => {
+const signIn = async (req, res, next) => {
   const secret = process.env.JWT_SECRET
   try {
     console.log('user wanted: ', req.body)
-    const user = await Users.findOne({ email: req.body.email })
+    const user = await User.findOne({ email: req.body.email })
     console.log('user found: ', user)
 
     if (!user || !user.validatePassword(req.body.password)) {
@@ -46,7 +39,7 @@ router.post('/signIn', async (req, res) => {
   } catch (err) {
     res.status(401).json({ message: 'Unauthorized' })
   }
-})
+}
 
 module.exports = {
   signUp, signIn
