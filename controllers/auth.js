@@ -1,7 +1,11 @@
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
+// array for all keys needed to sign in
+
 const signUp = async (req, res, next) => {
+  // iterate over keys array to check if all are present
+  
   try {
     let query = User.create(req.body)
     let user = await query
