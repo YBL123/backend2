@@ -12,8 +12,8 @@ const userSchema = new Schema({
   address: { type: String, required: true, maxlength: 1000 },
   typeOfUser: { type: String, enum: ['seller', 'client'] },
   profession: { type: String, required: true, maxlength: 500 }, //! unless its a client it can be nil
-  longitude: { type: Number, required: true, maxlength: 2000 },
-  latitude: { type: Number, required: true, maxlength: 2000 },
+  longitude: { type: Number, required: true },
+  latitude: { type: Number, required: true },
 });
 
 

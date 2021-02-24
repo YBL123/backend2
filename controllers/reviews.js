@@ -25,13 +25,39 @@ const postReview = async (req, res, next) => {
     let review = await query
     res.status(200).json({ success: true, review})
   } catch (err) {
-    console.log(err)
     res.status(500).json({ err: 'unable to post review' })
   }
-
   
 }
 
+const getAllUserReviews = async(req, res, next) => {
+  if (!req.query.hasOwnProperty('sellerId')) {
+    res.status(404).json({ err: 'sellerId is invalid' })
+  }
+
+  const userId = req.query.sellerId
+
+  const user = await User.findById(userId)
+  if(!user) {
+    res.status(404).json({ err: 'user does not exist' })
+  }
+  try {
+    let query = Review.find({ user:userId })
+
+    let reviews = await query
+  
+    if(reviews.length > 0) {
+      res.status(200).json(reviews)
+    } else {
+      res.status(404).json({ msg: 'no reviews for this user' })
+    }
+  } catch (err) {
+    res.status(500).json({ err: 'unable to view reviews' })
+  }
+
+}
+
 module.exports = {
-  postReview
+  postReview,
+  getAllUserReviews
 }
