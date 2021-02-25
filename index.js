@@ -1,18 +1,14 @@
 const express = require('express')
-const mongoose = require('mongoose')
+const connectDB = require('./config/connectDb')
 const dotenv = require('dotenv')
+
+
 
 //PATH TO ENV
 dotenv.config({ path: './config/config.env' })
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: true
-})
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.log(error))
+connectDB()
 
 //ROUTES
 const authRouter = require('./routes/authRoutes')

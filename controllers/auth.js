@@ -24,7 +24,39 @@ const signUp = async (req, res, next) => {
       }
     });
 
-    let query = User.create(req.body);
+    if (
+      typeof req.body.email !== 'string' ||
+      typeof req.body.firstName !== 'string' ||
+      typeof req.body.lastName !== 'string' ||
+      typeof req.body.address !== 'string' ||
+      typeof req.body.typeOfUser !== 'string' ||
+      typeof req.body.profession !== 'string'
+    ) {
+      res
+        .status(404)
+        .json({
+          err:
+            'email, firstName, lastname, address, typeOfUser, profession type must be strings',
+        });
+    }
+
+    //creating a new user and spreading to make sure that only these keys matchning the above are permitted to go through
+    const newUser = {
+      email: req.body.email,
+      password: req.body.password,
+      passwordConfirmation: req.body.passwordConfirmation,
+      username: req.body.username,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      address: req.body.address,
+      typeOfUser: req.body.typeOfUser,
+      profession: req.body.profession,
+      longitude: req.body.longitude,
+      latitude: req.body.latitude,
+    };
+
+    //passing in newUser that contains only the desired keys
+    let query = User.create(newUser);
     let user = await query;
 
     query = User.findOne({ _id: user._id });
