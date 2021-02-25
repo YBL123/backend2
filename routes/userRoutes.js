@@ -5,5 +5,4 @@ const secureRoute = require('../lib/secureRoute');
 userRouter.route('/users/getAllSellers').get(getAllUsers);
 userRouter.route('/getNearestSellers').get(secureRoute, getNearestUser);
 
-
 module.exports = userRouter;
