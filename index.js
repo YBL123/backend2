@@ -15,7 +15,9 @@ mongoose.connect(process.env.MONGO_URI, {
   .catch(err => console.log(error))
 
 //ROUTES
-const router = require('./config/routes')
+const authRouter = require('./routes/authRoutes')
+const userRouter = require('./routes/userRoutes')
+const reviewRouter = require('./routes/reviewRoutes')
 
 const app = express()
 
@@ -23,7 +25,7 @@ const app = express()
 app.use(express.json())
 
 // USER ROUTES
-app.use('/api', router)
+app.use('/api', authRouter, userRouter, reviewRouter)
 
 const PORT = process.env.PORT || 5000
 

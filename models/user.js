@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt');
 
-
 const userSchema = new Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
@@ -11,12 +10,10 @@ const userSchema = new Schema({
   lastName: { type: String, required: true, maxlength: 50 },
   address: { type: String, required: true, maxlength: 1000 },
   typeOfUser: { type: String, enum: ['seller', 'client'] },
-  profession: { type: String, required: true, maxlength: 500 }, //! unless its a client it can be nil
+  profession: { type: String, required: true, maxlength: 500 },
   longitude: { type: Number, required: true },
   latitude: { type: Number, required: true },
 });
-
-
 
 //AUTH
 userSchema.methods.validatePassword = function (password) {

@@ -41,8 +41,8 @@ const signUp = async (req, res, next) => {
 
 const signIn = async (req, res, next) => {
   try {
-    if(process.env === undefined) {
-      res.status(500).json({ err: 'Unable to sign in' })
+    if (process.env === undefined) {
+      res.status(500).json({ err: 'Unable to sign in' });
     }
     const secret = process.env.JWT_SECRET;
 
