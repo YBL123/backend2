@@ -20,7 +20,7 @@ const signUp = async (req, res, next) => {
     // iterate over keys array to check if all are present
     userKeysArr.forEach((key) => {
       if (!req.body.hasOwnProperty(key)) {
-        res.status(404).json({ err: 'one or more invalid fields' });
+        return res.status(404).json({ err: 'one or more invalid fields' });
       }
     });
 
@@ -32,12 +32,7 @@ const signUp = async (req, res, next) => {
       typeof req.body.typeOfUser !== 'string' ||
       typeof req.body.profession !== 'string'
     ) {
-      res
-        .status(404)
-        .json({
-          err:
-            'email, firstName, lastname, address, typeOfUser, profession type must be strings',
-        });
+      return res.status(404).json({ err:'email, firstName, lastname, address, typeOfUser, profession type must be strings'});
     }
 
     //creating a new user and spreading to make sure that only these keys matchning the above are permitted to go through
@@ -64,17 +59,17 @@ const signUp = async (req, res, next) => {
 
     user = await query;
 
-    res.status(201).json(user);
+    return res.status(201).json(user);
   } catch (err) {
     console.log(err);
-    res.status(422).json(err);
+    return res.status(422).json(err);
   }
 };
 
 const signIn = async (req, res, next) => {
   try {
     if (process.env === undefined) {
-      res.status(500).json({ err: 'Unable to sign in' });
+      return res.status(500).json({ err: 'Unable to sign in' });
     }
     const secret = process.env.JWT_SECRET;
 
@@ -86,12 +81,12 @@ const signIn = async (req, res, next) => {
 
     const token = jwt.sign({ sub: user._id }, secret, { expiresIn: '7 days' });
 
-    res.status(202).json({
+    return res.status(202).json({
       message: `Welcome back ${user.firstName}`,
       token,
     });
   } catch (err) {
-    res.status(401).json({ message: 'Unauthorized' });
+    return res.status(401).json({ message: 'Unauthorized' });
   }
 };
 

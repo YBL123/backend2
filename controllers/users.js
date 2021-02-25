@@ -4,10 +4,12 @@ const { calcDistance } = require('../helpers/calcDistance');
 const getAllUsers = async (req, res, next) => {
   try {
     const users = await User.find();
-    if (!users) throw Error('No users');
-    res.status(200).json(users);
+    if (!users){
+      return res.status(400).json({ err: 'No users exist in database' })
+    }
+    return res.status(200).json(users);
   } catch (err) {
-    res.status(400).json({ msg: err });
+    return res.status(400).json({ msg: err });
   }
 };
 
@@ -18,19 +20,17 @@ const getNearestUser = async (req, res, next) => {
       !req.query.hasOwnProperty('longitude') ||
       !req.query.hasOwnProperty('maxDistance')
     ) {
-      res.status(404).json({
+      return res.status(404).json({
         err: 'missing either latitude, longitude or maxDistance in param query',
       });
     }
 
-    //These are the REQUEST params
+    //These are the REQUEST QUERY PARAMS
     const latitude = req.query.latitude;
     const longitude = req.query.longitude;
     const maxDistance = req.query.maxDistance;
 
-    let users;
-
-    users = await User.find();
+    const users = await User.find();
 
     //NEAREST DISTANCE
     let nearest = {
@@ -54,9 +54,9 @@ const getNearestUser = async (req, res, next) => {
         }
       }
     }
-    res.status(200).json(nearest);
+    return res.status(200).json(nearest);
   } catch (err) {
-    res.status(400).json({ msg: err });
+    return res.status(400).json({ msg: err });
   }
 };
 

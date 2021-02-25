@@ -1,4 +1,3 @@
-const axios = require('axios');
 const User = require('../models/user');
 const Review = require('../models/review');
 
@@ -10,14 +9,14 @@ const postReview = async (req, res, next) => {
       !req.body.hasOwnProperty('reviewValue') ||
       !req.body.hasOwnProperty('comment')
     ) {
-      res
+      return res
         .status(404)
         .json({ err: 'review value or comments have not been provided' });
     } else if (
       typeof req.body.reviewValue !== 'number' ||
       typeof req.body.comment !== 'string'
     ) {
-      res.status(400).json({ err: 'invalid review or comment type' });
+      return res.status(400).json({ err: 'invalid review or comment type' });
     }
 
     const userId = req.query.sellerId;
@@ -26,41 +25,38 @@ const postReview = async (req, res, next) => {
 
     const user = await User.findById(userId);
     if (!user) {
-      res.status(404).json({ err: 'user does not exist' });
+      return res.status(404).json({ err: 'user does not exist' });
     }
 
-    let query = Review.create({ reviewValue, comment, user: userId });
-    let review = await query;
-    res.status(200).json({ success: true, review });
+    const query = Review.create({ reviewValue, comment, user: userId });
+    const review = await query;
+    return res.status(200).json({ success: true, review });
   } catch (err) {
-    res.status(500).json({ err: 'unable to post review' });
+    return res.status(500).json({ err: 'unable to post review' });
   }
 };
 
 const getAllSingleUserReviews = async (req, res, next) => {
   try {
     if (!req.query.hasOwnProperty('sellerId')) {
-      res.status(404).json({ err: 'sellerId is invalid' });
+      return res.status(404).json({ err: 'sellerId is invalid' });
     }
 
     const userId = req.query.sellerId;
 
     const user = await User.findById(userId);
     if (!user) {
-      res.status(404).json({ err: 'user does not exist' });
+      return res.status(404).json({ err: 'user does not exist' });
     }
 
-    let query = Review.find({ user: userId });
+    const query = Review.find({ user: userId });
 
-    let reviews = await query;
+    const reviews = await query;
 
-    if (reviews.length > 0) {
-      res.status(200).json(reviews);
-    } else {
-      res.status(404).json({ msg: 'no reviews for this user' });
-    }
+    return res.status(200).json(reviews);
+    
   } catch (err) {
-    res.status(500).json({ err: 'unable to view reviews' });
+    return res.status(500).json({ err: 'unable to view reviews' });
   }
 };
 
