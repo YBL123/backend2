@@ -14,6 +14,8 @@ API written in Node.js and express.
 * Node.js
 * Express
 * Postman
+* mongoose
+* MongoDB Atlas
 
 ## Getting Started
 
